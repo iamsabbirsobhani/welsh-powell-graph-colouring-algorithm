@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welsh Powell Graph colouring Algorithm</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="/dist/output.css" rel="stylesheet">
+    <!-- Meta -->
+    <meta name="description"
+        content="Welsh Powells Graph algorithm is implemented in this website. Implemented in a dynamic manner in Live View mode.">
+
+    <!--  Essential META Tags -->
+    <meta property="og:title" content="Welsh Powell Graph colouring Algorithm">
+    <meta property="og:type" content="Algorithm Implementaiton" />
+    <meta property="og:image" content="/node.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!--  Non-Essential, But Recommended -->
+    <meta property="og:description"
+        content="Welsh Powells Graph algorithm is implemented in this website. Implemented in a dynamic manner in Live View mode.">
+    <meta property="og:site_name" content="Welsh Powell Graph colouring Algorithm">
+    <meta name="twitter:image:alt" content="Welsh Powell Graph colouring Algorithm Logo">
+    <link rel="icon" type="image/x-icon" href="/node.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Ubuntu', sans-serif;
+            color: #111827;
+        }
+
+        #plot-area {
+            display: grid;
+            grid-gap: 10px;
+            position: relative;
+
+            transition: all 1s linear;
+        }
+
+        #straightLine {
+            position: absolute;
+            height: 5px;
+            z-index: -1;
+            background-color: #374151c9;
+            box-shadow: .5px .5px 5px 0px #374151b0;
+            transition: all 1s linear;
+        }
+
+        .nodecircle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            justify-self: center;
+            align-self: center;
+            border-radius: 50%;
+            margin: 70px;
+            background-color: #3b82f6;
+            box-shadow: 0px 0px 10px 0px rgba(59, 131, 246, 0.795);
+            cursor: pointer;
+            transition: all 1s;
+
+        }
+
+        .nodecircle-even {
+            left: 40px;
+        }
+
+        .nodecircle-odd {
+            top: -50px;
+            left: -40px;
+        }
+
+        .active {
+            background-color: #22c55e;
+        }
+
+        #title {
+            font-size: 40px;
+            /* background: -webkit-linear-gradient(284deg, rgba(22, 78, 99, 1) 0%, rgba(52, 211, 153, 1) 100%); */
+            background: -webkit-linear-gradient(284deg, rgba(225, 29, 72, 1) 0%, rgba(37, 99, 235, 1) 32%, rgba(147, 51, 234, 1) 71%, rgba(5, 150, 105, 1) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <nav class=" max-w-2xl m-auto">
+            <div class="flex justify-between  flex-col items-center">
+                <img class="w-40 h-40" src="/node.png" alt="">
+                <div class="nav ">
+                    <h1 id="title" class="  font-bold text-center mt-3 mb-3">Welsh Powell
+                        Graph colouring</h1>
+                </div>
+                <div class="flex mt-4 mb-4">
+                    <div class=" mr-3">
+                        <button id="run"
+                            class=" w-20 p-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-700 duration-500 transition-all rounded-full text-white font-bold  active:to-blue-600">Run</button>
+                    </div>
+                    <div id="reset" class=" ml-3 mr-3">
+                        <button
+                            class=" w-24  p-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-700  rounded-full text-white font-bold   duration-500 transition-all active:to-red-600">Reset</button>
+                    </div>
+                    <div id="reset" class=" ml-3">
+                        <button id="begin"
+                            class="  p-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-700 rounded-full text-white font-bold  hover:bg-green-600 duration-500 transition-all active:to-green-600">Begin
+                            Again</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+        <div id="popup-condition" class="">
+            <div class=" backdrop-blur-md w-full h-full absolute left-0 right-0 bottom-0 top-0 z-10"></div>
+            <div
+                class=" absolute m-auto rounded-md shadow-xl left-0 right-0 z-20 top-0 bottom-0 w-[500px] h-[500px] bg-gray-50">
+                <div class=" w-32 m-auto mt-5 relative">
+                    <img class=" w-28 object-cover" src="/node.png" alt="">
+                    <div class=" absolute w-32 h-32 top-0 bg-transparent z-30"></div>
+                </div>
+                <div class=" text-center mt-3">
+                    <h1 class=" font-bold text-xl">Welsh Powell Graph colouring Algorithm</h1>
+                    <p>Dynamic Implementaiton</p>
+                </div>
+                <form method="POST"
+                    class="p-2 absolute top-10 left-0 bottom-0 right-0 m-auto flex justify-center items-center">
+                    <div class="flex flex-col justify-center items-center h-full ">
+                        <div class=" mb-3 flex flex-col justify-center items-center ">
+                            <label for="nodeCount" class="text-xl mb-3 font-bold">Enter number of nodes</label>
+                            <input type="number" id="nodeCount" name="nodeCount"
+                                class="border-2 w-full border-gray-300 p-2 rounded-md outline-none" min="2" max="1000"
+                                placeholder="2-1000">
+                        </div>
+                        <div class="">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-600 font-bold  text-white p-2 rounded-md transition-all duration-500">Enter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class=" grid grid-cols-2 gap-3">
+            <div class=" shadow-2xl border-none mt-5 mb-5 p-2 max-w-[800px] rounded-md" id="plot-area"></div>
+            <div id="output"
+                class=" font-bold text-gray-900 shadow-2xl border-none mt-5 mb-5 p-2 max-w-[800px] rounded-md">
+                <h1 class=" text-2xl text-center mb-3">Output</h1>
+                <h1 id="total-colors-msg" class=" text-3xl font-bold text-red-500"></h1>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class=" flex justify-center items-center mt-5 mb-5">
+            <div class=" mr-3">
+
+                <a href="" class=" text-blue-500 hover:text-blue-600">2023 Made with ❤️ by Sabbir Sobhani</a>
+            </div>
+        </div>
+
+
+    </div>
+    <div id="message" class=" m-auto mt-5 mb-5 max-w-lg">
+        <div class=" w-40 m-auto">
+            <img class="w-40 h-40" src="/node.png" alt="">
+        </div>
+        <h1 class=" text-3xl font-bold text-center  ">This project is not intended for small screens and mobile devices.
+        </h1>
+    </div>
+    <!-- make a loading screen -->
+
+    <script src="/app.js"></script>
+</body>
+
+</html>
