@@ -26,9 +26,13 @@ git clone https://github.com/iamsabbirsobhani/welsh-powell-graph-colouring-algor
        .\env\Scripts\activate
        ```
     2. Unix/macOS
-       `   python3 -m venv env`
+       ```
+       python3 -m venv env
+       ```
        Activating the virtual environment.
-       `   source env/bin/activate`
+       ```
+       source env/bin/activate
+       ```
        [Details about Installing packages using pip and python virtual environments](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#installing-packages-using-pip-and-virtual-environments)
 
 3.  Install all the required packages
